@@ -1,7 +1,7 @@
 <template>
-  <div class="Todo">
+  <div>
     <h1 class="header">Vue todo App!</h1>
-    <input type="text" class="input" placeholder="Add todo" @keyup.enter="addTodo">     
+    <input type="text" class="input" v-model="taskName" placeholder="Add todo" @keyup.enter="addTodo">     
       
     <ul>
       <li v-for="todo in todos" :key="todo.id" class="flex">
@@ -15,7 +15,7 @@
       </li>
     </ul>
 
-    <button class="delete-all" @click="removeTodo(todo.done)">You can delete all checked items here</button>
+    <button class="delete-all" :class="{ 'delete-all__visible': todos.length > 1 }" @click="removeAllChecked">Delete all checked items</button>
   </div>
 </template>
 
@@ -23,20 +23,20 @@
   export default {
     name: 'Todo',
     
-    data: function() {
+    data: () => {
       return {
-        todos: []
+        todos: [],
+        taskName: '',
       };
     },
 
     methods: {
-      addTodo({target}){
-        this.todos.push({text: target.value, done: false, id: Date.now()})
-        target.value = ''
+      addTodo() {
+        this.todos.push({ text: this.taskName, done: false, id: this.taskName })
       },
 
-      removeTodo(id) {
-        this.todos = this.todos.filter(todo => todo.id !== id)
+      removeAllChecked() {
+        this.todos = this.todos.filter(todo => todo.done === false)
       }
     }
   }
@@ -49,6 +49,7 @@
     margin: 0 auto;
     display: none;
     margin-top: 30px;
+    cursor: pointer;
   }
 
   .delete-all__visible {
@@ -74,6 +75,7 @@
     height: 20px;
     margin-right: 20px;
     font-size: 24px;
+    cursor: pointer;
   }
 
   .input {
@@ -86,6 +88,8 @@
 
   .remove {
     margin-left: 20px;
+    font-weight: bolder;
+    cursor: pointer;
   }
 
   ul {
