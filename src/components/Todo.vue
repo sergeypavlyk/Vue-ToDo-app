@@ -3,40 +3,42 @@
     <h1 class="header">Vue todo App!</h1>
     <input type="text" class="input" v-model="taskName" placeholder="Add todo" @keyup.enter="addTodo">     
       
-    <ul>
-      <li v-for="todo in todos" :key="todo.id" class="flex">
-        <label>
-          <input type="checkbox" v-model="todo.done">
-        </label>
-        <del v-if="todo.done">{{ todo.text }}</del>
-        <span v-else>{{ todo.text }}</span>
-        <span class="space"></span>
-        <button class="remove" @click="removeTodo(todo.id)">X</button>
-      </li>
-    </ul>
+    <ToDoList :removeItem="removeTodo" :todos="todos" :counter="counter"/>
 
     <button class="delete-all" :class="{ 'delete-all__visible': todos.length > 1 }" @click="removeAllChecked">Delete all checked items</button>
+    <p class="counter">{{counter}}</p>
   </div>
 </template>
 
 <script>
+  import ToDoList from './TodoList'; 
+
   export default {
     name: 'Todo',
-    
+    components: {
+      ToDoList,
+    },
     data: () => {
       return {
         todos: [],
         taskName: '',
+        counter: 0,
       };
     },
-
     methods: {
-      addTodo() {
-        this.todos.push({ text: this.taskName, done: false, id: this.taskName })
+      removeTodo(i) {
+        const index = this.todos.indexOf(i)
+        this.todos.splice(index - 1, 1)
+        this.counter = this.todos.length
       },
-
+      
+      addTodo() {
+        this.todos.push({ text: this.taskName, done: false })
+        this.counter = this.todos.length
+      },
       removeAllChecked() {
         this.todos = this.todos.filter(todo => todo.done === false)
+        this.counter = this.todos.length
       }
     }
   }
@@ -52,24 +54,6 @@
     cursor: pointer;
   }
 
-  .delete-all__visible {
-    display: block;
-  }
-
-  span {
-    font-size: 22px;
-    font-family: sans-serif;
-    font-weight: bold;
-  }
-  .space {
-    flex-grow: 1;
-  }
-
-  .header {
-    color: brown;
-    text-align: center;
-  }
-
   input {
     width: 20px;
     height: 20px;
@@ -78,39 +62,20 @@
     cursor: pointer;
   }
 
+  .delete-all__visible {
+    display: block;
+  }
+
+  .header {
+    color: brown;
+    text-align: center;
+  }
+
   .input {
     text-align: center;
     margin: 0 auto;
     display: block;
     height: 30px;
     width: 300px;
-  }
-
-  .remove {
-    margin-left: 20px;
-    font-weight: bolder;
-    cursor: pointer;
-  }
-
-  ul {
-    padding: 0;
-  }
-
-  li {
-    margin: 8px 0;
-  }
-
-  del {
-    color: rgba(0, 0, 0, 0.3);
-    font-size: 22px;
-    font-family: sans-serif;
-    font-weight: bold;
-  }
-
-  .flex {
-    display: flex;
-    width: 300px;
-    margin: 0 auto;
-    margin-bottom: 10px;
   }
 </style>
