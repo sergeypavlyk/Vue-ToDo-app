@@ -3,10 +3,10 @@
     <h1 class="header">Vue todo App!</h1>
     <input type="text" class="input" v-model="taskName" placeholder="Add todo" @keyup.enter="addTodo">     
       
-    <ToDoList :removeItem="removeTodo" :todos="todos" :counter="counter"/>
+    <ToDoList :todos="todos"/>
 
     <button class="delete-all" :class="{ 'delete-all__visible': todos.length > 1 }" @click="removeAllChecked">Delete all checked items</button>
-    <p class="counter">{{counter}}</p>
+    <p class="counter">{{todos.length}}</p>
   </div>
 </template>
 
@@ -21,24 +21,18 @@
     data: () => {
       return {
         todos: [],
-        taskName: '',
-        counter: 0,
+        taskName: ''
       };
     },
     methods: {
-      removeTodo(i) {
-        const index = this.todos.indexOf(i)
-        this.todos.splice(index - 1, 1)
-        this.counter = this.todos.length
-      },
-      
       addTodo() {
-        this.todos.push({ text: this.taskName, done: false })
-        this.counter = this.todos.length
+        if (this.taskName) {
+          this.todos.push({ text: this.taskName, done: false })
+          this.taskName = ''
+        }
       },
       removeAllChecked() {
         this.todos = this.todos.filter(todo => todo.done === false)
-        this.counter = this.todos.length
       }
     }
   }
