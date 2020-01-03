@@ -34,7 +34,9 @@
     methods: {
       addTodo() {
         if (this.taskName) {
-          this.todos.push({ text: this.taskName, done: false })
+          // eslint-disable-next-line no-console
+          console.log(this.taskName)
+          this.todos.push({ title: this.taskName, completed: false })
           this.taskName = ''
         }
       },
@@ -51,7 +53,7 @@
       },
 
       removeAllChecked() {
-        this.todos = this.todos.filter(todo => todo.done === false)
+        this.todos = this.todos.filter(todo => todo.completed === false)
       }
     }
   }
