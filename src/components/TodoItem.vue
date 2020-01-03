@@ -1,15 +1,12 @@
 <template>
-  <div>
-    <li v-for="(todo, i) in todos" :key="i" class="flex">
-      <label>
-        <input type="checkbox" v-model="todo.done">
-      </label>
-      <del v-if="todo.done">{{ todo.text }}</del>
-      <span v-else>{{ todo.text }}</span>
-      <span class="space"></span>
-      <button class="remove" @click="$emit('removeItem', i)">X</button>
-    </li>
-  </div>
+  <li class="flex">
+    <label>
+      <input type="checkbox" @change="$emit('toggle')" :checked="completed">
+    </label>
+    <span :class="{'throught': completed }">{{ title }}</span>
+    <span class="space"></span>
+    <button class="remove" @click="$emit('removeItem')">X</button>
+  </li>
 </template>
 
 <script>
@@ -17,8 +14,10 @@
     name: 'TodoItem',
     props: {
       todos: Array,
-      removeItem: Function
-    }
+      removeItem: Function,
+      title: String,
+      completed: Boolean,
+    },
   }
 </script>
 
@@ -27,6 +26,10 @@
     font-size: 22px;
     font-family: sans-serif;
     font-weight: bold;
+  }
+
+  .throught {
+    text-decoration: line-through;
   }
 
   .space {

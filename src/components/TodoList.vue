@@ -1,6 +1,14 @@
 <template>
   <ul>
-    <TodoItem @removeItem="removeTodo" :todos="todos"/>  
+    <TodoItem  
+      v-for="todo in todos" 
+      @removeItem="$emit('remove', todo.id)"
+      @toggle="$emit('toggle', todo.id)"
+      :key="todo.id"  
+      :id="todo.id"  
+      :title="todo.title"
+      :completed="todo.completed"
+    />  
   </ul>
 </template>
 
@@ -15,10 +23,7 @@
       removeItem: Function
     },
     methods: {
-      removeTodo(i) {
-        const index = this.todos.indexOf(i)
-        this.todos.splice(index - 1, 1)
-      }
+
     }
   }
 </script>

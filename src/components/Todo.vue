@@ -2,9 +2,7 @@
   <div>
     <h1 class="header">Vue todo App!</h1>
     <input type="text" class="input" v-model="taskName" placeholder="Add todo" @keyup.enter="addTodo">     
-      
-    <ToDoList :todos="todos"/>
-
+    <ToDoList @remove="removeTodo" @toggle="toggle" :todos="todos"/>
     <button class="delete-all" :class="{ 'delete-all__visible': todos.length > 1 }" @click="removeAllChecked">Delete all checked items</button>
     <p class="counter">{{todos.length}}</p>
   </div>
@@ -24,6 +22,15 @@
         taskName: ''
       };
     },
+
+    created() {
+       fetch('https://jsonplaceholder.typicode.com/todos')
+        .then(response => response.json())
+        .then(allTodos => {
+          this.todos = allTodos.splice(0, 10)
+        });
+    },
+
     methods: {
       addTodo() {
         if (this.taskName) {
@@ -31,6 +38,18 @@
           this.taskName = ''
         }
       },
+
+      toggle(selectedId) {
+        const index = this.todos.findIndex(({ id }) => selectedId === id);
+        const oldItem = this.todos[index];
+        this.todos.splice(index, 1, { ...oldItem, completed: !oldItem.completed })
+      },
+
+      removeTodo(i) {
+        const index = this.todos.findIndex(({ id }) => i === id);
+        this.todos.splice(index, 1)
+      },
+
       removeAllChecked() {
         this.todos = this.todos.filter(todo => todo.done === false)
       }
@@ -38,7 +57,7 @@
   }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
   .delete-all  {
     width: 250px;
     height: 36px;
