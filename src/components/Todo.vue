@@ -1,59 +1,54 @@
 <template>
   <div>
     <h1 class="header">Vue todo App!</h1>
-    <input type="text" class="input" v-model="taskName" placeholder="Add todo" @keyup.enter="addTodo">     
-    <ToDoList @remove="removeTodo" @toggle="toggle" :todos="todos"/>
-    <button class="delete-all" :class="{ 'delete-all__visible': todos.length > 1 }" @click="removeAllChecked">Delete all checked items</button>
-    <p class="counter">{{todos.length}}</p>
+    <input type="text" :value="taskName" class="input" @input="updateTaskName" placeholder="Add todo" @keyup.enter="addTodo">     
+
+    <ToDoList @toggle="toggle" />
+
+    <button class="delete-all" :class="{ 'delete-all__visible': allTodos.length > 1 }" @click="removeAllChecked">Delete all checked items</button>
+    <p class="counter">{{allTodos.length}}</p>
   </div>
 </template>
 
 <script>
-  import ToDoList from './TodoList'; 
+  import ToDoList from './TodoList';
+  import { mapGetters } from 'vuex';
 
   export default {
     name: 'Todo',
+
     components: {
       ToDoList,
     },
-    data: () => {
-      return {
-        todos: [],
-        taskName: ''
-      };
-    },
+
+    computed: mapGetters ([
+      'allTodos',
+      'taskName'
+    ]),
 
     created() {
-       fetch('https://jsonplaceholder.typicode.com/todos')
-        .then(response => response.json())
-        .then(allTodos => {
-          this.todos = allTodos.splice(0, 10)
-        });
+      this.$store.dispatch('fetchTodos')
     },
 
     methods: {
+      updateTaskName (e) {
+        this.$store.commit('updateTaskName', e.target.value)
+      },
+
       addTodo() {
-        if (this.taskName) {
-          // eslint-disable-next-line no-console
-          console.log(this.taskName)
-          this.todos.push({ title: this.taskName, completed: false })
-          this.taskName = ''
-        }
+        this.$store.commit('addTodo')
       },
 
-      toggle(selectedId) {
-        const index = this.todos.findIndex(({ id }) => selectedId === id);
-        const oldItem = this.todos[index];
-        this.todos.splice(index, 1, { ...oldItem, completed: !oldItem.completed })
+      toggle(id) {
+        this.$store.commit('selectItem', id)
       },
 
-      removeTodo(i) {
-        const index = this.todos.findIndex(({ id }) => i === id);
-        this.todos.splice(index, 1)
+      removeTodo(id) {
+        this.$store.commit('removeItem', id)
       },
 
       removeAllChecked() {
-        this.todos = this.todos.filter(todo => todo.completed === false)
+        this.$store.commit('removeAllChecked')
       }
     }
   }

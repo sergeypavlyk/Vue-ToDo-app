@@ -1,9 +1,7 @@
 <template>
   <ul>
     <TodoItem  
-      v-for="todo in todos" 
-      @removeItem="$emit('remove', todo.id)"
-      @toggle="$emit('toggle', todo.id)"
+      v-for="todo in allTodos"
       :key="todo.id"  
       :id="todo.id"  
       :title="todo.title"
@@ -14,14 +12,16 @@
 
 <script>
   import TodoItem from './TodoItem';
+  import { mapGetters } from 'vuex';
 
   export default {
     name: 'ToDoList',
+
     components: { TodoItem },
-    props: {
-      todos: Array,
-      removeItem: Function
-    }
+
+    computed: mapGetters ([
+      'allTodos'
+    ])
   }
 </script>
 

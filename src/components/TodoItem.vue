@@ -1,22 +1,33 @@
 <template>
   <li class="flex">
     <label>
-      <input type="checkbox" @change="$emit('toggle')" :checked="completed">
+      <input type="checkbox" @change="selectItem(id)" :checked="completed">
     </label>
     <span :class="{'throught': completed }">{{ title }}</span>
     <span class="space"></span>
-    <button class="remove" @click="$emit('removeItem')">X</button>
+    <button class="remove" @click="removeItem(id)">X</button>
   </li>
 </template>
 
 <script>
   export default {
     name: 'TodoItem',
+
     props: {
       todos: Array,
-      removeItem: Function,
       title: String,
       completed: Boolean,
+      id: Number,
+    },
+
+    methods: {
+      removeItem(id) {
+        this.$store.commit('removeItem', id)
+      },
+
+      selectItem(id) {
+        this.$store.commit('selectItem', id)
+      }
     },
   }
 </script>
