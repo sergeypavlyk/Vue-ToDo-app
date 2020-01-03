@@ -21,9 +21,6 @@
     props: {
       todos: Array,
       removeItem: Function
-    },
-    methods: {
-
     }
   }
 </script>
