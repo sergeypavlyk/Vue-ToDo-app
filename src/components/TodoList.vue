@@ -1,8 +1,8 @@
 <template>
   <ul>
     <TodoItem  
-      v-for="todo in allTodos"
-      :key="todo.id"  
+      v-for="(todo, index) in allTodos"
+      :key="index"  
       :id="todo.id"  
       :title="todo.title"
       :completed="todo.completed"

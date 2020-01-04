@@ -21,9 +21,11 @@ export default new Vuex.Store({
       state.taskName = newTaskName
     },
 
-    addTodo ({todos, taskName}) {
-      todos.push({ title: taskName, completed: false })
-      taskName = ''
+    addTodo (state) {
+      if (state.taskName !== '') {
+        state.todos.push({ title: state.taskName, completed: false, id: state.todos.length + 1 })
+      }
+      state.taskName = ''
     },
 
     selectItem ({todos}, id) {
@@ -41,9 +43,8 @@ export default new Vuex.Store({
       state.todos = state.todos.filter(todo => !todo.completed)
     },
 
-    setTodos (state, todos) {
-      state.todos = todos
-      state.allItems = todos
+    setTodos (state, fetchedTodos) {
+      state.todos = fetchedTodos
     }
   },
 
