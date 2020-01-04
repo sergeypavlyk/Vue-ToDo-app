@@ -5,7 +5,7 @@
 
     <ToDoList @toggle="toggle" />
 
-    <button class="delete-all" :class="{ 'delete-all__visible': allTodos.length > 1 }" @click="removeAllChecked">Delete all checked items</button>
+    <b-button class="delete-all" :class="{ 'delete-all__visible': allTodos.length > 1 }" @click="removeAllChecked" type="is-primary" outlined>Delete all checked items</b-button>
     <p class="counter">{{allTodos.length}}</p>
   </div>
 </template>
@@ -79,6 +79,8 @@
   .header {
     color: brown;
     text-align: center;
+    font-size: 36px;
+    margin: 10px 0;
   }
 
   .input {

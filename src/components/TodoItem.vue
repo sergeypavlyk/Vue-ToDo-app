@@ -47,6 +47,12 @@
     flex-grow: 1;
   }
 
+  label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
   input {
     width: 20px;
     height: 20px;
@@ -59,6 +65,7 @@
     margin-left: 20px;
     font-weight: bolder;
     cursor: pointer;
+    height: 30px
   }
 
   li {
@@ -75,7 +82,8 @@
   .flex {
     display: flex;
     width: 300px;
-    margin: 0 auto;
-    margin-bottom: 10px;
+    margin: 15px auto;
+    justify-content: center;
+    align-items: center
   }
 </style>
